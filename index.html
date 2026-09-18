@@ -27,13 +27,58 @@ button:active{transform:scale(.97)}
 <form id="form" class="composer"><input id="input" autocomplete="off" placeholder="Message Galaxy AI…"><button>Send</button></form>
 </div>
 <script>
-const chat=document.getElementById('chat'), empty=document.getElementById('empty'), input=document.getElementById('input');
-function add(text,who){empty.style.display='none';const d=document.createElement('div');d.className='msg '+who;d.textContent=text;chat.appendChild(d);chat.scrollTop=chat.scrollHeight}
-function demoAnswer(q){
-  if(/^(hi|hello|hey|namaskar|नमस्कार|हाय)/i.test(q)) return 'Hello! I am Galaxy AI. How can I help you?';
-  return 'Galaxy AI demo is ready. Your question was: “'+q+'”\n\nTo get real AI answers, connect this app to a secure AI backend/API.';
+const chat = document.getElementById("chat");
+const empty = document.getElementById("empty");
+const input = document.getElementById("input");
+
+function add(text, who) {
+  empty.style.display = "none";
+
+  const d = document.createElement("div");
+  d.className = "msg " + who;
+  d.textContent = text;
+
+  chat.appendChild(d);
+  chat.scrollTop = chat.scrollHeight;
 }
-document.getElementById('form').addEventListener('submit',e=>{e.preventDefault();const q=input.value.trim();if(!q)return;add(q,'user');input.value='';setTimeout(()=>add(demoAnswer(q),'ai'),350)});
-</script>
+
+document.getElementById("form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const q = input.value.trim();
+  if (!q) return;
+
+  add(q, "user");
+  input.value = "";
+
+  add("Thinking...", "ai");
+
+  try {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message: q })
+    });
+
+    const data = await response.json();
+
+    const messages = document.querySelectorAll(".msg.ai");
+    const last = messages[messages.length - 1];
+
+    if (!response.ok) {
+      last.textContent = data.error || "Something went wrong.";
+      return;
+    }
+
+    last.textContent = data.reply || "No response received.";
+
+  } catch (error) {
+    const messages = document.querySelectorAll(".msg.ai");
+    const last = messages[messages.length - 1];
+    last.textContent = "Connection error. Please try again.";
+  }
+});
 </body>
 </html>
