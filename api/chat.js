@@ -30,12 +30,12 @@ export async function POST(request) {
       );
     }
 
-    const reply =
-      data.output
-        ?.flatMap(item => item.content || [])
-        ?.filter(part => part.type === "output_text")
-        ?.map(part => part.text)
-        ?.join("") || "";
+const reply =
+  data.output
+    ?.flatMap(item => item.content || [])
+    ?.filter(part => part.type === "output_text")
+    ?.map(part => part.text)
+    ?.join("") || "";
 
     return Response.json({
       reply: reply || "No response received."
