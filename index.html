@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Galaxy AI</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#050612;color:#fff;height:100vh}
+.app{height:100vh;display:flex;flex-direction:column;background:radial-gradient(circle at 20% 10%,#24205c 0,#0b0b1e 35%,#050612 75%)}
+header{padding:18px 18px 12px;border-bottom:1px solid #24243d;display:flex;align-items:center;gap:12px}
+.logo{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#7c5cff,#16c7ff);box-shadow:0 0 28px #6150ff88;font-size:21px}
+.title{font-weight:800;font-size:20px}.sub{font-size:12px;color:#a9a9c4}
+.chat{flex:1;overflow:auto;padding:18px 14px 110px}
+.msg{max-width:82%;padding:12px 14px;border-radius:18px;margin:10px 0;line-height:1.45;white-space:pre-wrap}
+.ai{background:#15152b;border:1px solid #29294a;margin-right:auto}.user{background:linear-gradient(135deg,#5d45e8,#267cff);margin-left:auto}
+.empty{text-align:center;color:#aaaac3;margin-top:22vh}.empty h1{font-size:28px;margin:0 0 8px}.empty p{margin:0}
+.composer{position:fixed;bottom:0;left:0;right:0;padding:12px;background:#080817ee;backdrop-filter:blur(12px);border-top:1px solid #25253d;display:flex;gap:8px}
+input{flex:1;min-width:0;background:#121226;color:white;border:1px solid #303052;border-radius:24px;padding:13px 16px;outline:none}
+button{border:0;border-radius:22px;padding:0 17px;background:#7358ff;color:white;font-weight:700}
+button:active{transform:scale(.97)}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="logo">✦</div><div><div class="title">Galaxy AI</div><div class="sub">Your smart AI assistant</div></div></header>
+<main id="chat" class="chat"><div id="empty" class="empty"><h1>How can I help?</h1><p>Ask Galaxy AI anything.</p></div></main>
+<form id="form" class="composer"><input id="input" autocomplete="off" placeholder="Message Galaxy AI…"><button>Send</button></form>
+</div>
+<script>
+const chat=document.getElementById('chat'), empty=document.getElementById('empty'), input=document.getElementById('input');
+function add(text,who){empty.style.display='none';const d=document.createElement('div');d.className='msg '+who;d.textContent=text;chat.appendChild(d);chat.scrollTop=chat.scrollHeight}
+function demoAnswer(q){
+  if(/^(hi|hello|hey|namaskar|नमस्कार|हाय)/i.test(q)) return 'Hello! I am Galaxy AI. How can I help you?';
+  return 'Galaxy AI demo is ready. Your question was: “'+q+'”\n\nTo get real AI answers, connect this app to a secure AI backend/API.';
+}
+document.getElementById('form').addEventListener('submit',e=>{e.preventDefault();const q=input.value.trim();if(!q)return;add(q,'user');input.value='';setTimeout(()=>add(demoAnswer(q),'ai'),350)});
+</script>
+</body>
+</html>
