@@ -30,8 +30,15 @@ export async function POST(request) {
       );
     }
 
+    const reply =
+      data.output
+        ?.flatMap(item => item.content || [])
+        ?.filter(part => part.type === "output_text")
+        ?.map(part => part.text)
+        ?.join("") || "";
+
     return Response.json({
-      reply: data.output_text
+      reply: reply || "No response received."
     });
 
   } catch (error) {
@@ -40,4 +47,4 @@ export async function POST(request) {
       { status: 500 }
     );
   }
-      }
+}
