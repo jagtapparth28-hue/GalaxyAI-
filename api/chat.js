@@ -7,7 +7,7 @@ export async function POST(request) {
         { error: "Message is required" },
         { status: 400 }
       );
-    }
+    } 
 
     const response = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
