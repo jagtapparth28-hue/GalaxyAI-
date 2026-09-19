@@ -1,391 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Galaxy AI V3.0</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Galaxy AI V3.0</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      background: #0b0b0f;
-      color: white;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .app {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      height: 65px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 16px;
-      background: #111116;
-      border-bottom: 1px solid #292930;
-    }
-
-    .logo {
-      font-size: 21px;
-      font-weight: bold;
-    }
-
-    .version {
-      font-size: 11px;
-      color: #aaa;
-      margin-left: 5px;
-    }
-
-    button {
-      border: none;
-      cursor: pointer;
-    }
-
-    #newChat {
-      background: #24242c;
-      color: white;
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-size: 14px;
-    }
-
-    #newChat:active {
-      transform: scale(.96);
-    }
-
-    #chat {
-      flex: 1;
-      overflow-y: auto;
-      padding: 18px 14px 100px;
-    }
-
-    .welcome {
-      text-align: center;
-      margin-top: 25vh;
-      color: #aaa;
-    }
-
-    .welcome h1 {
-      color: white;
-      font-size: 28px;
-      margin-bottom: 8px;
-    }
-
-    .welcome p {
-      font-size: 14px;
-    }
-
-    .msg {
-      max-width: 88%;
-      padding: 12px 14px;
-      margin: 10px 0;
-      border-radius: 16px;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-
-    .user {
-      margin-left: auto;
-      background: #315efb;
-      border-bottom-right-radius: 5px;
-    }
-
-    .ai {
-      margin-right: auto;
-      background: #1d1d24;
-      border-bottom-left-radius: 5px;
-    }
-
-    .thinking {
-      color: #aaa;
-      font-style: italic;
-    }
-
-    form {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 10px;
-      background: #0b0b0f;
-      border-top: 1px solid #292930;
-      display: flex;
-      gap: 8px;
-    }
-
-    #input {
-      flex: 1;
-      min-width: 0;
-      padding: 13px 15px;
-      border: 1px solid #33333c;
-      border-radius: 14px;
-      outline: none;
-      background: #17171d;
-      color: white;
-      font-size: 15px;
-    }
-
-    #input:focus {
-      border-color: #526eff;
-    }
-
-    #send {
-      width: 50px;
-      border-radius: 14px;
-      background: #315efb;
-      color: white;
-      font-size: 20px;
-    }
-
-    #send:active {
-      transform: scale(.94);
-    }
-
-    @media (min-width: 700px) {
-      #chat {
-        padding-left: 20%;
-        padding-right: 20%;
-      }
-
-      form {
-        padding-left: 20%;
-        padding-right: 20%;
-      }
-    }
-  </style>
-</head>
-
-<body>
-
-<div class="app">
-
-  <header>
-    <div>
-      <span class="logo">🌌 Galaxy AI</span>
-      <span class="version">V3.0</span>
-    </div>
-
-    <button id="newChat">＋ New Chat</button>
-  </header>
-
-  <main id="chat">
-
-    <div id="welcome" class="welcome">
-      <h1>Galaxy AI</h1>
-      <p>How can I help you today?</p>
-    </div>
-
-  </main>
-
-  <form id="form">
-<button id="mic" type="button">🎙️</button>
-    <input
-      id="input"
-      type="text"
-      placeholder="Message Galaxy AI..."
-      autocomplete="off"
-    >
-
-    <button id="send" type="submit">➤</button>
-
-  </form>
-
-</div>
-
-<script>
-
-const chat = document.getElementById("chat");
-const welcome = document.getElementById("welcome");
-const input = document.getElementById("input");
-const form = document.getElementById("form");
-const newChat = document.getElementById("newChat");
-const mic = document.getElementById("mic");
-function addMessage(text, type) 
-
-  if (welcome) {
-    welcome.style.display = "none";
-  }
-
-  const message = document.createElement("div");
-
-  message.className = "msg " + type;
-  message.textContent = text;
-
-  chat.appendChild(message);
-
-  chat.scrollTop = chat.scrollHeight;
-
-  return message;
-}
-mic.addEventListener("click", function() {
-  const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  if (!SpeechRecognition) {
-    alert("Voice input is not supported.");
-    return;
-  }
-
-  const recognition = new SpeechRecognition();
-
-  recognition.lang = "en-IN";
-  recognition.interimResults = false;
-  recognition.continuous = false;
-
-  recognition.start();
-
-  recognition.onresult = function(event) {
-    input.value = event.results[0][0].transcript;
-  };
-});
-
-function saveChat() {
-
-  localStorage.setItem(
-    "galaxy_ai_v3_chat",
-    chat.innerHTML
-  );
-
+<style>
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
 }
 
-
-function loadChat() {
-
-  const saved = localStorage.getItem(
-    "galaxy_ai_v3_chat"
-  );
-
-  if (saved) {
-
-    chat.innerHTML = saved;
-
-    chat.scrollTop = chat.scrollHeight;
-
-  }
-
+body{
+font-family:Arial,sans-serif;
+background:#08080d;
+color:#fff;
+height:100vh;
+overflow:hidden;
 }
 
+.app{
+height:100vh;
+display:flex;
+flex-direction:column;
+}
 
-newChat.addEventListener("click", function() {
+header{
+height:64px;
+flex-shrink:0;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 14px;
+background:#111118;
+border-bottom:1px solid #292934;
+}
 
-  localStorage.removeItem("galaxy_ai_v3_chat");
+.logo{
+font-size:20px;
+font-weight:bold;
+}
 
-  chat.innerHTML = `
-    <div id="welcome" class="welcome">
-      <h1>Galaxy AI</h1>
-      <p>How can I help you today?</p>
-    </div>
-  `;
+.version{
+font-size:11px;
+color:#888;
+margin-left:5px;
+}
 
-});
+.headerButtons{
+display:flex;
+gap:7px;
+}
 
+.headerButtons button{
+border:0;
+background:#252530;
+color:#fff;
+border-radius:10px;
+padding:9px 11px;
+font-size:13px;
+}
 
-form.addEventListener("submit", async function(e) {
+#chat{
+flex:1;
+overflow-y:auto;
+padding:20px 13px 105px;
+scroll-behavior:smooth;
+}
 
-  e.preventDefault();
+.welcome{
+text-align:center;
+margin-top:24vh;
+color:#999;
+}
 
-  const question = input.value.trim();
+.welcome h1{
+font-size:30px;
+color:#fff;
+margin-bottom:8px;
+}
 
-  if (!question) return;
+.welcome p{
+font-size:14px;
+}
 
-  addMessage(question, "user");
+.msg{
+max-width:88%;
+padding:12px 14px;
+margin:10px 0;
+border-radius:17px;
+line-height:1.5;
+white-space:pre-wrap;
+word-break:break-word;
+}
 
-  input.value = "";
+.user{
+margin-left:auto;
+background:#315efb;
+border-bottom-right-radius:5px;
+}
 
-  const aiMessage = addMessage(
-    "Thinking...",
-    "ai thinking"
-  );
+.ai{
+margin-right:auto;
+background:#1d1d26;
+border-bottom-left-radius:5px;
+}
 
-  try {
+.thinking{
+color:#999;
+font-style:italic;
+}
 
-    const response = await fetch("/api/chat", {
+.actions{
+display:flex;
+gap:5px;
+margin-top:7px;
+}
 
-      method: "POST",
+.actions button{
+border:0;
+background:#292932;
+color:#ccc;
+padding:5px 8px;
+border-radius:8px;
+font-size:12px;
+}
 
-      headers: {
-        "Content-Type": "application/json"
-      },
+form{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+display:flex;
+gap:7px;
+padding:10px;
+background:#0b0b10;
+border-top:1px solid #292934;
+}
 
-      body: JSON.stringify({
-        message: question
-      })
+#input{
+flex:1;
+min-width:0;
+border:1px solid #34343f;
+outline:none;
+border-radius:14px;
+padding:13px 14px;
+background:#17171e;
+color:#fff;
+font-size:15px;
+}
 
-    });
+#input:focus{
+border-color:#526eff;
+}
 
+.toolBtn{
+width:46px;
+flex-shrink:0;
+border:0;
+border-radius:14px;
+background:#252530;
+color:#fff;
+font-size:18px;
+}
 
-    const data = await response.json();
+#send{
+width:50px;
+flex-shrink:0;
+border:0;
+border-radius:14px;
+background:#315efb;
+color:#fff;
+font-size:19px;
+}
 
+button:active{
+transform:scale(.94);
+}
 
-    if (!response.ok) {
+#file{
+display:none;
+}
 
-      aiMessage.textContent =
-        data.error || "Something went wrong.";
+#settingsPanel{
+display:none;
+position:fixed;
+top:70px;
+right:12px;
+width:260px;
+background:#181820;
+border:1px solid #33333e;
+border-radius:15px;
+padding:15px;
+z-index:20;
+box-shadow:0 10px 30px #000;
+}
 
-      aiMessage.classList.remove("thinking");
-
-      return;
-    }
-
-
-    aiMessage.classList.remove("thinking");
-
-    const reply =
-      data.reply || "No response received.";
-
-
-    aiMessage.textContent = "";
-
-    let i = 0;
-
-
-    const typing = setInterval(function() {
-
-      aiMessage.textContent += reply[i];
-
-      i++;
-
-      chat.scrollTop = chat.scrollHeight;
-
-
-      if (i >= reply.length) {
-
-        clearInterval(typing);
-
-        saveChat();
-
-      }
-
-    }, 15);
-
-
-  } catch (error) {
-
-    aiMessage.classList.remove("thinking");
-
-    aiMessage.textContent =
-      "Connection error. Please try again.";
-
-  }
-
-});
-
-
-loadChat();
-
-</script>
-
-</body>
-</html>
+#settingsPanel h3{
+margin-bottom:
