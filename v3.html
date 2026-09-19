@@ -211,8 +211,8 @@ const welcome = document.getElementById("welcome");
 const input = document.getElementById("input");
 const form = document.getElementById("form");
 const newChat = document.getElementById("newChat");
-
-function addMessage(text, type) {
+const mic = document.getElementById("mic");
+function addMessage(text, type) 
 
   if (welcome) {
     welcome.style.display = "none";
@@ -229,7 +229,9 @@ function addMessage(text, type) {
 
   return message;
 }
-
+mic.addEventListener("click", function() {
+  alert("🎙️ Mic clicked!");
+});
 
 function saveChat() {
 
